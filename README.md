@@ -6,7 +6,7 @@ sudo apt install gobject-introspection libgirepository1.0-dev libcairo2-dev pkg-
 ```
 pip install -r requirements.txt
 ```
-## Enable serial Port
+## Enable serial port
 ```
 sudo raspi-config
 ```
