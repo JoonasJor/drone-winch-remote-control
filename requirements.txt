@@ -1,0 +1,6 @@
+colorzero==2.0
+gpiozero==2.0
+pigpio==1.78
+pycairo==1.20.1
+PyGObject==3.42.2
+pyserial==3.5
