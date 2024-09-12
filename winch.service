@@ -2,8 +2,8 @@
 Description=Run winch main.py
 
 [Service]
-ExecStart=/usr/bin/python /home/vinssipi/vinssi_etaohjaus/main.py
-WorkingDirectory=/home/vinssipi/vinssi_etaohjaus/
+ExecStart=/usr/bin/python /path/to/script/main.py
+WorkingDirectory=/path/to/script/
 StandardOutput=inherit
 StandardError=inherit
 Restart=always
