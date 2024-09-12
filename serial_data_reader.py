@@ -35,8 +35,14 @@ class SerialDataReader:
         }"""
 
     def read_serial_data(self):
-        data = self.ser.readline()
         self.check_for_timeouts()
+        
+        try:
+            data = self.ser.readline()
+        except serial.SerialException as e:
+            print(f"Serial error: {e}")        
+            return
+        
         if len(data) < 8:
             return
 
