@@ -1,0 +1,14 @@
+[Unit]
+Description=Run winch main.py
+
+[Service]
+ExecStart=/usr/bin/python /home/vinssipi/vinssi_etaohjaus/main.py
+WorkingDirectory=/home/vinssipi/vinssi_etaohjaus/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+
