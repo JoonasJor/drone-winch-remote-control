@@ -11,29 +11,20 @@ pip install -r requirements.txt
 sudo raspi-config
 ```
 Interface Options > Serial Port > " Would you like the serial port hardware to be enabled?": Yes
-## Create systemd service
-```
-sudo nano /etc/systemd/system/name.service
-```
-```
-[Unit]
-Description=Start pigpio daemon and run main.py
+## Create systemd services
+1. Edit `winch.service` to set the correct paths for `ExecStart` and `WorkingDirectory`.
 
-[Service]
-ExecStart=/path/to/script/start.sh
-WorkingDirectory=/path/to/script/
-StandardOutput=inherit
-StandardError=inherit
-Restart=always
+2. Move both `winch.service` and `pigpio.service` to the systemd directory:
+    ```
+    sudo mv winch.service /etc/systemd/system/
+    sudo mv pigpio.service /etc/systemd/system/
+    ```
+3. Enable and start both services
+    ```
+    sudo systemctl enable --now pigpio.service
+    sudo systemctl enable --now winch.service
+    ```
 
-[Install]
-WantedBy=multi-user.target
-```
-```
-sudo systemctl enable name.service
-sudo systemctl start name.service
-```
-
-### Tested devices:  
+## Tested devices:  
 -Raspberry Pi Zero 2 W (Raspberry Pi OS 12 Bookworm)  
 -Raspberry Pi 4 Model B (Raspberry Pi OS 12 Bookworm)
