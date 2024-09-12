@@ -182,16 +182,17 @@ class VideoOutput:
 
             # Transmitter overlays
             for i, (serial_no, data) in enumerate(self.serial_data_reader.serial_data.items()):
+                textoverlay = self.transmitter_overlays[i]
                 transmitter_is_paired = data["learn_status"]
+
                 if not transmitter_is_paired:
+                    textoverlay.set_property("text", "")    
                     return
                 
                 rssi = data["rssi"]
                 battery_voltage = data["battery_voltage"]
                 battery_low = data["battery_low_voltage"]
                 transmitter_state = data["current_state"]
-
-                textoverlay = self.transmitter_overlays[i]
 
                 if transmitter_state == "TimedOut":
                     textoverlay.set_property(
