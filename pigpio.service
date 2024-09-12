@@ -1,0 +1,12 @@
+[Unit]
+Description=Start pigpio daemon
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/pigpiod
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+
+[Install]
+WantedBy=basic.target
