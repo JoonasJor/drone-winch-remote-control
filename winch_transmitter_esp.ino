@@ -12,8 +12,8 @@ int inputStateDown = HIGH;
 int inputStateUp = HIGH;
 
 // Pairing button
-unsigned long buttonPressTime = 0;
-const int buttonPin = 4;
+//unsigned long buttonPressTime = 0;
+//const int buttonPin = 4;
 
 void setup() {
   pinMode(inputPinDown, INPUT_PULLUP);
@@ -27,8 +27,8 @@ void setup() {
   digitalWrite(outputPinUp, HIGH);
   digitalWrite(outputPinIdle, HIGH);
 
-  pinMode(ledPin, OUTPUT);
-  pinMode(buttonPin, INPUT_PULLUP);
+  //pinMode(ledPin, OUTPUT);
+  //pinMode(buttonPin, INPUT_PULLUP);
 }
 
 void setOutputPin() {
@@ -49,13 +49,13 @@ void setOutputPin() {
 void sendSignal() {
   digitalWrite(currentOutputPin, LOW);
   digitalWrite(ledPin, HIGH);
-  delay(100);
+  delay(200);
   digitalWrite(currentOutputPin, HIGH);
   digitalWrite(ledPin, LOW);
   delay(200);
 }
 
-void checkButtonHold() {
+/*void checkButtonHold() {
   if (digitalRead(buttonPin) == LOW) {
     unsigned long currentTime = millis();
     if (currentTime - buttonPressTime > 2000) {
@@ -106,10 +106,10 @@ void pairingMode() {
       sendSignal();
     }
   }
-}
+}*/
 
 void loop() {
-  checkButtonHold();
+  //checkButtonHold(); // Not needed when "Automap" is enabled in transmiter
   setOutputPin();
   sendSignal();
 }
