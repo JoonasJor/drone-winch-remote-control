@@ -9,4 +9,4 @@ StandardError=inherit
 Restart=always
 
 [Install]
-WantedBy=basic.target
+WantedBy=multi-user.target
