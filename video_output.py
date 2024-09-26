@@ -157,7 +157,7 @@ class VideoOutput:
             if transmitter_state == "TimedOut":
                 text += (
                     f"S/N: {serial_no}\n"
-                    f"State: {transmitter_state}\n"  
+                    f"State: Timed Out\n"  
                 )
             else:
                 text += ( 
@@ -179,16 +179,20 @@ class VideoOutput:
         try:
             # Winch overlay
             self.winch_overlay.set_property("text", self.winch_controller.winch_state)
-
+            overlay_index = 0
             # Transmitter overlays
-            for i, (serial_no, data) in enumerate(self.serial_data_reader.serial_data.items()):
-                textoverlay = self.transmitter_overlays[i]
+            for serial_no, data in self.serial_data_reader.serial_data.items():
+                
                 transmitter_is_paired = data["learn_status"]
+                #print(data)
 
                 if not transmitter_is_paired:
-                    textoverlay.set_property("text", "")    
-                    return
+                    #textoverlay.set_property("text", "e")    
+                    continue
                 
+                textoverlay = self.transmitter_overlays[overlay_index]
+                overlay_index += 1
+
                 rssi = data["rssi"]
                 battery_voltage = data["battery_voltage"]
                 battery_low = data["battery_low_voltage"]
@@ -198,7 +202,7 @@ class VideoOutput:
                     textoverlay.set_property(
                         "text", 
                         f"S/N: {serial_no}\n"
-                        f"State: {transmitter_state}")    
+                        f"State: Timed Out")    
                 else:
                     textoverlay.set_property(
                         "text", 
@@ -217,11 +221,11 @@ class VideoOutput:
             err, debug_info = message.parse_error()
             print(f"Error received from element {message.src.get_name()}: {err.message}")
             print(f"Debugging information: {debug_info if debug_info else 'none'}")
-            self.main_loop.quit()  # Stop the main loop on error
+            #self.main_loop.quit()  # Stop the main loop on error
 
         elif message_type == Gst.MessageType.EOS:
             print("End-Of-Stream reached.")
-            self.main_loop.quit()  # Stop the main loop on EOS
+            #self.main_loop.quit()  # Stop the main loop on EOS
 
     def main(self):
         pipeline = self.create_pipeline()
