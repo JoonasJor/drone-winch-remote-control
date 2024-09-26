@@ -1,5 +1,7 @@
 [Unit]
 Description=Run winch main.py
+After=pigpio.service
+Requires=pigpio.service
 
 [Service]
 ExecStart=/usr/bin/python /path/to/script/main.py
