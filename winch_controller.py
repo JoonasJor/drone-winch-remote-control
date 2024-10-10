@@ -1,4 +1,3 @@
-from gpiozero import PWMOutputDevice
 from gpiozero import Servo
 from gpiozero.pins.pigpio import PiGPIOFactory
 
@@ -7,10 +6,8 @@ class WinchController:
         self.winch_state = "Idle" # Up, Down, Idle
         self.current_value = -1
         self.timeout_duration = 0.5  # Timeout duration in seconds
-        #self.timed_out = False
         self.last_input_time = 0
 
-        #self.pwm_output = PWMOutputDevice(pin=18, initial_value=0, frequency=100)
         factory = PiGPIOFactory()
         self.winch = Servo(21, initial_value=self.current_value, pin_factory=factory)
 
