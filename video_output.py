@@ -12,8 +12,9 @@ class VideoOutput:
         self.transmitter_overlays = []
         self.winch_overlay = None
 
+        self.display_fps = False
+
     def create_pipeline(self):
-        # Create the pipeline
         pipeline = Gst.Pipeline.new("pipeline")
 
         # Create elements
@@ -26,10 +27,12 @@ class VideoOutput:
         self.winch_overlay = self.create_text_overlay("winch_state_overlay", "bottom", "left")
 
         queue = Gst.ElementFactory.make("queue", "queue")
-        sink = Gst.ElementFactory.make("fpsdisplaysink", "fps_sink")
-        sink.set_property("video-sink", Gst.ElementFactory.make("glimagesink", "gl_sink"))
-        #sink = Gst.ElementFactory.make("glimagesink", "gl_sink")
-        sink.set_property("sync", False)
+        if self.display_fps:
+            sink = Gst.ElementFactory.make("fpsdisplaysink", "fps_sink")
+            sink.set_property("video-sink", Gst.ElementFactory.make("glimagesink", "gl_sink"))
+        else:
+            sink = Gst.ElementFactory.make("glimagesink", "gl_sink")
+        sink.set_property("sync", False) # Fixes random fps drops on startup
 
         # Add elements to the pipeline
         pipeline.add(source)
@@ -44,9 +47,6 @@ class VideoOutput:
         structure = Gst.Structure.new_empty("video/x-raw")
         structure.set_value("width", 1280)
         structure.set_value("height", 720)
-        #framerate = Gst.Fraction()
-        #framerate.numerator = 30
-        #framerate.denominator = 1
         structure.set_value("framerate", Gst.Fraction(30, 1))
         structure.set_value("format", "NV12")
         caps.append_structure(structure)
@@ -59,8 +59,7 @@ class VideoOutput:
         # Link the elements
         source.link(transmitter_overlay_0)
         transmitter_overlay_0.link(transmitter_overlay_1)
-        transmitter_overlay_1.link(self.winch_overlay)
-        
+        transmitter_overlay_1.link(self.winch_overlay)       
         self.winch_overlay.link(queue)
         queue.link(filter)
         filter.link(sink)
@@ -142,6 +141,8 @@ class VideoOutput:
         return overlay
     
     def construct_overlay_string(self):  
+        # Large overlays destroy fps. Not usable.
+
         text = f"Winch: {self.winch_controller.winch_state}\n"
         for serial_no, data in self.serial_data_reader.serial_data.items():
             transmitter_is_paired = data["learn_status"]
@@ -235,7 +236,6 @@ class VideoOutput:
         # Set up the bus to listen for messages
         bus = pipeline.get_bus()
         bus.add_signal_watch()
-        #bus.enable_sync_message_emission()
         bus.connect("message", self.on_message)
 
         # Create and run the main loop
